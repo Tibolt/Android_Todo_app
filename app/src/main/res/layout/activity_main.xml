@@ -22,6 +22,16 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="tasks"
+            android:textSize="25sp"
+            android:layout_marginStart="30dp"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/white"
+            android:onClick="tasksView"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="+"
             android:textSize="25sp"
             android:layout_gravity="end"

@@ -32,4 +32,9 @@ public class MainActivity extends AppCompatActivity {
         Intent newTabIntent = new Intent(this, TabDetailActivity.class);
         startActivity(newTabIntent);
     }
+
+    public void tasksView(View view) {
+        Intent tasksView = new Intent(this, TaskActivity.class);
+        startActivity(tasksView);
+    }
 }

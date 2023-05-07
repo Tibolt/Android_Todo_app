@@ -27,4 +27,8 @@ public class TaskActivity extends AppCompatActivity {
         Intent newTaskIntent = new Intent(this, TaskDetailActivity.class);
         startActivity(newTaskIntent);
     }
+
+    public void finishView(View view){
+        finish();
+    }
 }
