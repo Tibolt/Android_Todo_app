@@ -13,23 +13,24 @@
         android:textStyle="bold"
         android:maxLines="1"
         android:textColor="@color/black"
-        android:textSize="25sp" />
+        android:textSize="25sp"
+        android:layout_marginTop="15dp"/>
 
     <TextView
         android:id="@+id/taskCellDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Date"
-        android:textStyle="bold"
+        android:textStyle="italic"
         android:maxLines="1"
         android:textColor="@color/black"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:layout_marginTop="5dp"/>
     <CheckBox
         android:id="@+id/taskCellDone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Done"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:layout_marginTop="5dp" />
 </LinearLayout>

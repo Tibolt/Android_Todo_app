@@ -5,10 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     public ListView tabsListView;
+    public TabAdapter tabAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,10 +24,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         tabsListView = findViewById(R.id.tabsListView);
+        //create items for debugging
+        Tab.arrayList.add(new Tab(Tab.arrayList.size(), "Test"));
+        Task.arrayList.add(new Task(Task.arrayList.size(), "Test", "10.10.2020", false, 0));
+
     }
 
     private void initAdapter() {
-        TabAdapter tabAdapter = new TabAdapter(getApplicationContext(), Tab.arrayList);
+        tabAdapter = new TabAdapter(getApplicationContext(), R.layout.tab_cell, Tab.arrayList);
         tabsListView.setAdapter(tabAdapter);
 
     }
@@ -36,5 +44,11 @@ public class MainActivity extends AppCompatActivity {
     public void tasksView(View view) {
         Intent tasksView = new Intent(this, TaskActivity.class);
         startActivity(tasksView);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        tabAdapter.notifyDataSetChanged();
     }
 }

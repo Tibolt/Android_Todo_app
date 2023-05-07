@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Tab {
     public static ArrayList<Tab> arrayList = new ArrayList<>();
-    private int id;
-    private String title;
+    protected int id;
+    protected String title;
 
     public Tab(int id, String title) {
         this.id = id;

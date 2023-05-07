@@ -7,8 +7,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 public class TaskActivity extends AppCompatActivity {
     private ListView tasksListView;
+    private TaskAdapter taskAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,7 +24,7 @@ public class TaskActivity extends AppCompatActivity {
         tasksListView = findViewById(R.id.tasksListView);
     }
     private void initAdapter() {
-        TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), Task.arrayList);
+        taskAdapter = new TaskAdapter(getApplicationContext(), R.layout.task_cell, Task.arrayList);
         tasksListView.setAdapter(taskAdapter);
     }
     public void newTask(View view) {
@@ -30,5 +34,10 @@ public class TaskActivity extends AppCompatActivity {
 
     public void finishView(View view){
         finish();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        taskAdapter.notifyDataSetChanged();
     }
 }

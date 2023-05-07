@@ -5,14 +5,12 @@ import java.util.Date;
 
 public class Task extends Tab {
     public static ArrayList<Task> arrayList = new ArrayList<>();
-    private int id;
-    private String title;
-    private Date endDate;
+    private String endDate;
     private boolean done;
 
     private int tabId;
 
-    public Task(int id, String title, Date endDate, Boolean done, int tabId) {
+    public Task(int id, String title, String endDate, Boolean done, int tabId) {
         super(id, title);
         this.endDate = endDate;
         this.done = done;
@@ -35,11 +33,11 @@ public class Task extends Tab {
         this.title = title;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
