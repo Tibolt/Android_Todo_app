@@ -15,7 +15,7 @@ public class TaskActivity extends AppCompatActivity {
     private ListView tasksListView;
     private TaskAdapter taskAdapter;
     private TextView tabTitle;
-    private int tabID;
+    public int tabID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,10 +33,13 @@ public class TaskActivity extends AppCompatActivity {
     }
     private void initAdapter() {
         taskAdapter = new TaskAdapter(getApplicationContext(), R.layout.task_cell, Task.arrayList);
+
         tasksListView.setAdapter(taskAdapter);
+        taskAdapter.setTabId(tabID);
     }
     public void newTask(View view) {
         Intent newTaskIntent = new Intent(this, TaskDetailActivity.class);
+        newTaskIntent.putExtra("currentTabID", tabID);
         startActivity(newTaskIntent);
     }
 
