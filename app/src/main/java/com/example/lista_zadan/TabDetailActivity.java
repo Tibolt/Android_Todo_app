@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import java.util.ArrayList;
-
 public class TabDetailActivity extends AppCompatActivity {
     private EditText titleEditText;
 
@@ -24,12 +22,17 @@ public class TabDetailActivity extends AppCompatActivity {
     }
 
     public void saveTab(View view) {
-        String title = String.valueOf(titleEditText.getText());
+        SqlAdapter sql = SqlAdapter.dbObject(this);
 
         int id = Tab.arrayList.size();
+        String title = String.valueOf(titleEditText.getText());
         Tab newTab = new Tab(id, title);
         Tab.arrayList.add(newTab);
+        sql.addTabToDB(newTab);
+        finish();
+    }
 
+    public void finishView(View view){
         finish();
     }
 }

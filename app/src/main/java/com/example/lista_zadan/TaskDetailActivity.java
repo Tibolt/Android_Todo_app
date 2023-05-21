@@ -32,4 +32,8 @@ public class TaskDetailActivity extends AppCompatActivity {
 
         finish();
     }
+
+    public void finishView(View view){
+        finish();
+    }
 }

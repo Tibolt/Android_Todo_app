@@ -12,12 +12,22 @@
         android:theme="@style/CardView.Dark"
         android:background="@color/black" >
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="back"
+            android:textSize="25sp"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/white"
+            android:onClick="finishView"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TABS"
+            android:text="New Tab"
             android:textSize="25sp"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:layout_marginStart="60sp"/>
 
         <Button
             android:layout_width="wrap_content"
