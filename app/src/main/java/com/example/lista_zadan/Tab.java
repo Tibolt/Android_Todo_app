@@ -27,4 +27,12 @@ public class Tab {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public static Tab getSelectedID(int passedID) {
+        for(Tab tab : arrayList) {
+            if(tab.getId() == passedID)
+                return tab;
+        }
+        return null;
+    }
 }

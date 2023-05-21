@@ -1,1 +1,0 @@
-## Lista zadan - Java Android Project
