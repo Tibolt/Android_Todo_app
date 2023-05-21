@@ -13,15 +13,6 @@
         android:background="@color/black"
         android:layout_alignParentBottom="true">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="tasks"
-            android:textSize="25sp"
-            android:textColor="@color/black"
-            android:backgroundTint="@color/white"
-            android:onClick="tasksView"/>
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
