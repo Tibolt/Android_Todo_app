@@ -2,20 +2,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
-    android:padding="15dp">
+    android:layout_height="120dp"
+    android:padding="15dp"
+    android:clickable="true"
+    android:focusable="true">
 
-    <TextView
-        android:id="@+id/taskCellTitle"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Title"
-        android:textStyle="bold"
-        android:maxLines="1"
-        android:textColor="@color/black"
-        android:textSize="25sp"
-        android:layout_marginTop="15dp"/>
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/taskCellDone"
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"/>
 
+        <TextView
+            android:id="@+id/taskCellTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="55dp"
+            android:maxLines="1"
+            android:text="Title"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tabName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:maxLines="1"
+            android:text="Tab"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
     <TextView
         android:id="@+id/taskCellDate"
         android:layout_width="wrap_content"
@@ -26,11 +51,5 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         android:layout_marginTop="5dp"/>
-    <CheckBox
-        android:id="@+id/taskCellDone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Done"
-        android:textSize="20sp"
-        android:layout_marginTop="5dp" />
+
 </LinearLayout>

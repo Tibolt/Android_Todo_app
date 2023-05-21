@@ -19,9 +19,6 @@
             android:name=".TabDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".TaskActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

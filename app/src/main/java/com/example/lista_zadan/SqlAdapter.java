@@ -25,7 +25,7 @@ public class SqlAdapter extends SQLiteOpenHelper {
         public static final String COLUMN_NAME_TITLE = "title";
         public static final String IS_DONE = "isDone";
         public static final String END_DATE = "endDate";
-        public static final String TAB_ID = "tabID";
+        public static final String TAB_NAME = "tabName";
     }
     private static final String TAB_CREATE_ENTRIES =
             "CREATE TABLE " +
@@ -42,7 +42,7 @@ public class SqlAdapter extends SQLiteOpenHelper {
             TaskDB.COLUMN_NAME_TITLE + " TEXT," +
             TaskDB.END_DATE + " TEXT," +
             TaskDB.IS_DONE + " TEXT," +
-            TaskDB.TAB_ID + " INTEGER)";
+            TaskDB.TAB_NAME + " TEXT)";
 
     private static final String TASK_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TaskDB.TABLE_NAME;
@@ -61,13 +61,11 @@ public class SqlAdapter extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(TAB_CREATE_ENTRIES);
         db.execSQL(TASK_CREATE_ENTRIES);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(TAB_DELETE_ENTRIES);
         db.execSQL(TASK_DELETE_ENTRIES);
         onCreate(db);
     }
@@ -94,16 +92,28 @@ public class SqlAdapter extends SQLiteOpenHelper {
         sql.close();
     }
 
-    public void addTaskToDB(Task task, int tabID) {
+    public void addTaskToDB(Task task) {
         SQLiteDatabase sql = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+
+        // Check if there is an item with the same ID in the database
+        String query = "SELECT * FROM " + TaskDB.TABLE_NAME +" WHERE _id = ?";
+        String[] selectionArgs = {String.valueOf(task.getId())};
+        Cursor cursor = sql.rawQuery(query, selectionArgs);
+
+        if (cursor.moveToFirst()) {
+            // If there is an item with the same ID, increment the ID by 1
+            task.setId(task.getId() + 1);
+        }
+        cursor.close();
 
         contentValues.put(TaskDB._ID, task.getId());
         contentValues.put(TaskDB.COLUMN_NAME_TITLE, task.getTitle());
         contentValues.put(TaskDB.END_DATE, task.getEndDate());
         contentValues.put(TaskDB.IS_DONE, task.getDone());
-        contentValues.put(TaskDB.TAB_ID, tabID);
+        contentValues.put(TaskDB.TAB_NAME, task.getTabName());
         sql.insert(TaskDB.TABLE_NAME, null, contentValues);
+        sql.close();
     }
 
     public void readTabFromDB() {
@@ -128,8 +138,6 @@ public class SqlAdapter extends SQLiteOpenHelper {
 //            Tab.arrayList.add(tab);
 //        }
 //        cursor.close();
-
-
     }
 
     public void readTaskFromDB() {
@@ -138,29 +146,32 @@ public class SqlAdapter extends SQLiteOpenHelper {
         try (Cursor result = sql.rawQuery("SELECT * FROM " + TaskDB.TABLE_NAME, null)) {
             if(result.getCount() != 0) {
                 while (result.moveToNext()) {
-                    int id = result.getInt(1);
-                    String title = result.getString(2);
-                    String endDate = result.getString(3);
-                    String isDone = result.getString(4);
-                    int tabID = result.getInt(5);
+                    int id = result.getInt(0);
+                    String title = result.getString(1);
+                    String endDate = result.getString(2);
+                    String isDone = result.getString(3);
+                    String tabName = result.getString(4);
 
                     boolean done;
                     done = isDone.equals("true");
 
-                    Task task = new Task(id, title, endDate, done, tabID);
+                    Task task = new Task(id, title, endDate, done, tabName);
                     Task.arrayList.add(task);
                 }
             }
         }
     }
 
-    public void updateTabInDB(Tab tab) {
+    public void updateTaskInDB(Task task) {
         SQLiteDatabase sql = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(TabDB._ID, tab.getId());
-        contentValues.put(TabDB.COLUMN_NAME_TITLE, tab.getTitle());
+        contentValues.put(TaskDB._ID, task.getId());
+        contentValues.put(TaskDB.COLUMN_NAME_TITLE, task.getTitle());
+        contentValues.put(TaskDB.END_DATE, task.getEndDate());
+        contentValues.put(TaskDB.IS_DONE, task.getDone());
+        contentValues.put(TaskDB.TAB_NAME, task.getTabName());
 
-        sql.update(TabDB.TABLE_NAME, contentValues, TabDB._ID + " =? ", new String[]{String.valueOf(tab.getId())});
+        sql.update(TaskDB.TABLE_NAME, contentValues, TaskDB._ID + " =? ", new String[]{String.valueOf(task.getId())});
     }
 }

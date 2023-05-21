@@ -9,8 +9,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
-    public ListView tabsListView;
-    public TabAdapter tabAdapter;
+    public ListView tasksListView;
+    public TaskAdapter taskAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void init() {
-        tabsListView = findViewById(R.id.tabsListView);
+        tasksListView = findViewById(R.id.tasksListView);
         //create items for debugging
         //Tab.arrayList.add(new Tab(Tab.arrayList.size(), "Test"));
         //Task.arrayList.add(new Task(Task.arrayList.size(), "Test", "10.10.2020", false, 0));
@@ -32,41 +32,36 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadDB() {
         SqlAdapter sql = SqlAdapter.dbObject(this);
-        sql.readTabFromDB();
+        sql.readTaskFromDB();
     }
 
     private void initAdapter() {
-        tabAdapter = new TabAdapter(getApplicationContext(), R.layout.tab_cell, Tab.arrayList);
-        tabsListView.setAdapter(tabAdapter);
-
+        taskAdapter = new TaskAdapter(this, R.layout.task_cell, Task.arrayList);
+        tasksListView.setAdapter(taskAdapter);
     }
 
-    public void newTab(View view) {
-        Intent newTabIntent = new Intent(this, TabDetailActivity.class);
-        startActivity(newTabIntent);
-    }
-
-    public void tasksView(View view) {
-        Intent tasksView = new Intent(this, TaskActivity.class);
-        startActivity(tasksView);
+    public void newTask(View view) {
+        Intent newTaskIntent = new Intent(this, TaskDetailActivity.class);
+        startActivity(newTaskIntent);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        tabAdapter.notifyDataSetChanged();
+        taskAdapter.notifyDataSetChanged();
+    }
+    public void finishView(View view){
+        finish();
     }
 
     private void setOnClickListener() {
-        tabsListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        tasksListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Tab tab = (Tab) tabsListView.getItemAtPosition(position);
-                Intent tasksView = new Intent(getApplicationContext(), TaskActivity.class);
-                tasksView.putExtra("currentTabID", tab.getId());
-                startActivity(tasksView);
-                //editIntent.putExtra("editTab", tab.getId());
-                //startActivity(editIntent);
+                Task task = (Task) tasksListView.getItemAtPosition(position);
+                Intent taskEdit = new Intent(getApplicationContext(), TaskDetailActivity.class);
+                taskEdit.putExtra("taskID", task.getId());
+                startActivity(taskEdit);
             }
         });
     }

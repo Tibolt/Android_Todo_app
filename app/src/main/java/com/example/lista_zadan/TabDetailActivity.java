@@ -37,7 +37,6 @@ public class TabDetailActivity extends AppCompatActivity {
         }
         else {
             selectedTab.setTitle(title);
-            sql.updateTabInDB(selectedTab);
         }
         finish();
     }

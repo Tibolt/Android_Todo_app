@@ -7,14 +7,13 @@ public class Task extends Tab {
     public static ArrayList<Task> arrayList = new ArrayList<>();
     private String endDate;
     private boolean done;
+    private String tabName;
 
-    private int tabId;
-
-    public Task(int id, String title, String endDate, Boolean done, int tabId) {
+    public Task(int id, String title, String endDate, Boolean done, String  tabName) {
         super(id, title);
         this.endDate = endDate;
         this.done = done;
-        this.tabId = tabId;
+        this.tabName = tabName;
     }
 
     public int getId() {
@@ -48,12 +47,19 @@ public class Task extends Tab {
     public  void setDone(boolean done) {
         this.done = done;
     }
-
-    public int getTabId() {
-        return tabId;
+    public String getTabName() {
+        return tabName;
     }
 
-    public void setTabId(int tabId) {
-        this.tabId = tabId;
+    public void setTabName(String tabName) {
+        this.tabName = tabName;
     }
+    public static Task getSelectedID(int passedID) {
+        for(Task task : arrayList) {
+            if(task.getId() == passedID)
+                return task;
+        }
+        return null;
+    }
+
 }
