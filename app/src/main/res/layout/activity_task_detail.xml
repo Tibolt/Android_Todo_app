@@ -101,4 +101,38 @@
         android:maxLines="3"
         android:layout_marginTop="20dp"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="IS DONE"
+        android:textSize="25sp"
+        android:textColor="@color/black"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:layout_marginTop="25dp"/>
+
+    <CheckBox
+        android:id="@+id/isDoneCheck"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:textColor="@color/black"
+        android:layout_gravity="center"
+        android:maxLines="3"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"/>
+
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="delete"
+        android:textSize="25sp"
+        android:textColor="@color/black"
+        android:layout_gravity="center"
+        android:maxLines="3"
+        android:layout_marginTop="80dp"/>
+
+
+
 </LinearLayout>

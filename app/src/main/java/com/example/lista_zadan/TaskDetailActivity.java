@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import java.util.Date;
 
 public class TaskDetailActivity extends AppCompatActivity {
     private EditText titleEditText, descEditText, tabNameEditText;
+    private CheckBox isDoneCheckBox;
     private Task selectedTask;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         titleEditText = findViewById(R.id.taskTitleEditText);
         descEditText = findViewById(R.id.taskDescEditText);
         tabNameEditText = findViewById(R.id.tabNameEditText);
+        isDoneCheckBox = findViewById(R.id.isDoneCheck);
     }
 
     public void saveTask(View view) {
@@ -31,15 +34,22 @@ public class TaskDetailActivity extends AppCompatActivity {
         String title = String.valueOf(titleEditText.getText());
         String desc = String.valueOf(descEditText.getText());
         String tabName = String.valueOf(tabNameEditText.getText());
+        boolean isDone = isDoneCheckBox.isChecked();
+
+        System.out.println("Is done: " + isDone);
 
         if(selectedTask == null) {
             int id = Task.arrayList.size();
-            Task newTask = new Task(id, title, desc, false, tabName);
+            Task newTask = new Task(id, title, desc, isDone, tabName);
             Task.arrayList.add(newTask);
             sql.addTaskToDB(newTask);
         }
         else {
             selectedTask.setTitle(title);
+            selectedTask.setEndDate(desc);
+            selectedTask.setTabName(tabName);
+            selectedTask.setDone(isDone);
+
             sql.updateTaskInDB(selectedTask);
         }
         finish();
@@ -48,11 +58,14 @@ public class TaskDetailActivity extends AppCompatActivity {
     private void checkIfEdit() {
         Intent pIntent = getIntent();
 
-        int id = pIntent.getIntExtra("editTab", -1);
+        int id = pIntent.getIntExtra("taskID", -1);
         selectedTask = Task.getSelectedID(id);
 
         if (selectedTask != null) {
             titleEditText.setText(selectedTask.getTitle());
+            descEditText.setText(selectedTask.getEndDate());
+            tabNameEditText.setText(selectedTask.getTabName());
+            isDoneCheckBox.setChecked(selectedTask.getDone());
         }
     }
 

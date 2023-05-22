@@ -42,20 +42,19 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="tab: "
+            android:text="sort by: "
             android:textSize="24sp"
             android:textColor="@color/white"
             android:layout_marginStart="30dp"/>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/tabSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="edit"
             android:textSize="25sp"
             android:layout_gravity="end"
             android:textColor="@color/black"
             android:backgroundTint="@color/white"
-            android:onClick="editTabIntent"
             android:layout_marginEnd="15dp"/>
     </androidx.appcompat.widget.Toolbar>
 

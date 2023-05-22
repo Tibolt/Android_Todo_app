@@ -12,18 +12,18 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TaskAdapter extends ArrayAdapter<Task> {
-    private Activity activity;
     private Context context;
     private int resource;
-    public TaskAdapter(Activity activity,int resource, ArrayList<Task> tasks) {
+    public TaskAdapter(Context context,int resource, ArrayList<Task> tasks) {
 
-        super(activity, resource, tasks);
-        this.context = activity.getApplicationContext();
+        super(context, resource, tasks);
+        this.context = context;
         this.resource = resource;
     }
     @NonNull
@@ -37,10 +37,21 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         Task task = getItem(position);
         TextView title = convertView.findViewById(R.id.taskCellTitle);
         TextView date = convertView.findViewById(R.id.taskCellDate);
+        TextView tabName = convertView.findViewById(R.id.tabName);
         TextView isDone = convertView.findViewById(R.id.taskCellDone);
         title.setText(task.getTitle());
         date.setText(task.getEndDate());
+        tabName.setText(task.getTabName());
         //isDone.setChecked(task.getDone());
+
+        if (task.getDone()) {
+            isDone.setText("#");
+            isDone.setTextColor(ContextCompat.getColor(context, R.color.green));
+        }
+        else {
+            isDone.setText("o");
+            isDone.setTextColor(ContextCompat.getColor(context, R.color.red));
+        }
 
         return convertView;
     }
