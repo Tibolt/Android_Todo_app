@@ -186,6 +186,8 @@ public class SqlAdapter extends SQLiteOpenHelper {
 
     public void deleteTaskFromDB(Task task) {
         SQLiteDatabase sql = this.getWritableDatabase();
+        sql.delete(TaskDB.TABLE_NAME, "_id = ?", new String[] { String.valueOf(task.getId()) });
+        sql.close();
     }
 
     public ArrayList<String> getAllTabNames() {

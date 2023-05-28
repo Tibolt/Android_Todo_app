@@ -71,19 +71,16 @@
         android:textStyle="bold"
         android:layout_marginTop="25dp"/>
 
-    <DatePicker
+    <Button
         android:id="@+id/datePicker"
-        android:layout_width="wrap_content"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
+        android:text="Jan 01 2023"
+        android:textSize="25sp"
         android:textColor="@color/black"
-        android:layout_gravity="center"
-        android:datePickerMode="spinner"
-        android:scaleX="0.5"
-        android:scaleY="0.5"
-        android:layout_marginLeft="-50dp"
-        android:layout_marginRight="-50dp"
-        android:layout_marginTop="-50dp"
-        android:layout_marginBottom="-50dp"/>
+        android:layout_marginStart="90dp"
+        style="@style/Widget.AppCompat.Spinner"
+        android:onClick="openDatePicker"/>
 
 
     <TextView
@@ -136,7 +133,8 @@
         android:textColor="@color/black"
         android:layout_gravity="center"
         android:maxLines="3"
-        android:layout_marginTop="80dp"/>
+        android:layout_marginTop="80dp"
+        android:onClick="deleteTask"/>
 
 
 

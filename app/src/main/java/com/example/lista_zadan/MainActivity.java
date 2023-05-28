@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initAdapter() {
-        taskAdapter = new TaskAdapter(this, R.layout.task_cell, Task.arrayList);
+        taskAdapter = new TaskAdapter(this, R.layout.task_cell, Task.nonDeletedTasks());
         tasksListView.setAdapter(taskAdapter);
     }
 
@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        initAdapter();
         taskAdapter.notifyDataSetChanged();
     }
     public void finishView(View view){
