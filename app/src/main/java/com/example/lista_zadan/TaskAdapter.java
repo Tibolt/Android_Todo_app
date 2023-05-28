@@ -15,14 +15,18 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class TaskAdapter extends ArrayAdapter<Task> {
     private Context context;
     private int resource;
+    private ArrayList<Task> tasks;
     public TaskAdapter(Context context,int resource, ArrayList<Task> tasks) {
 
         super(context, resource, tasks);
+        this.tasks = tasks;
         this.context = context;
         this.resource = resource;
     }
@@ -54,5 +58,55 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         }
 
         return convertView;
+    }
+
+    public void sortByTitle() {
+        // Sort by title
+        tasks.sort(new Comparator<Task>() {
+            @Override
+            public int compare(Task task1, Task task2) {
+                String title1 = task1.getTitle();
+                String title2 = task2.getTitle();
+                // Sort in ascending order: alphabetically by title
+                return title1.compareToIgnoreCase(title2);
+            }
+        });
+        notifyDataSetChanged();
+    }
+    public void sortByDone() {
+        // Sort by done status
+        tasks.sort(new Comparator<Task>() {
+            @Override
+            public int compare(Task task1, Task task2) {
+                boolean isDone1 = task1.getDone();
+                boolean isDone2 = task2.getDone();
+                // Sort in descending order: done tasks first, undone tasks next
+                return Boolean.compare(isDone2, isDone1);
+            }
+        });
+        notifyDataSetChanged();
+    }
+    public void sortByTab() {
+        // Sort by TAB_NAME
+        tasks.sort(new Comparator<Task>() {
+            @Override
+            public int compare(Task task1, Task task2) {
+                String title1 = task1.getTabName();
+                String title2 = task2.getTabName();
+
+                // Handle null values
+                if (title1 == null && title2 == null) {
+                    return 0;
+                } else if (title1 == null) {
+                    return 1; // title1 is null, so it should be considered greater (placed at the bottom)
+                } else if (title2 == null) {
+                    return -1; // title2 is null, so it should be considered greater (placed at the bottom)
+                } else {
+                    // Sort in ascending order: alphabetically by TAB_NAME
+                    return title1.compareToIgnoreCase(title2);
+                }
+            }
+        });
+        notifyDataSetChanged();
     }
 }

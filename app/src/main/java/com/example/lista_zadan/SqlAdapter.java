@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
+import java.util.ArrayList;
+
 public class SqlAdapter extends SQLiteOpenHelper {
 
     private  static SqlAdapter sqlAdapter;
@@ -160,6 +162,7 @@ public class SqlAdapter extends SQLiteOpenHelper {
                 }
             }
         }
+        sql.close();
     }
 
     public void updateTaskInDB(Task task) {
@@ -178,5 +181,27 @@ public class SqlAdapter extends SQLiteOpenHelper {
         contentValues.put(TaskDB.TAB_NAME, task.getTabName());
 
         sql.update(TaskDB.TABLE_NAME, contentValues, TaskDB._ID + " =? ", new String[]{String.valueOf(task.getId())});
+        sql.close();
+    }
+
+    public void deleteTaskFromDB(Task task) {
+        SQLiteDatabase sql = this.getWritableDatabase();
+    }
+
+    public ArrayList<String> getAllTabNames() {
+        ArrayList<String> tabNames = new ArrayList<>();
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT DISTINCT " + TaskDB.TAB_NAME + " FROM " + TaskDB.TABLE_NAME, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String tabName = cursor.getString(cursor.getColumnIndex(TaskDB.TAB_NAME));
+                tabNames.add(tabName);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return tabNames;
     }
 }

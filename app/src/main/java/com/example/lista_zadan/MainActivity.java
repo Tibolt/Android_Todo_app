@@ -34,15 +34,21 @@ public class MainActivity extends AppCompatActivity {
     private void init() {
         tasksListView = findViewById(R.id.tasksListView);
         tabSpinner = findViewById(R.id.tabSpinner);
-        //create items for debugging
-        //Task.arrayList.add(new Task(Task.arrayList.size(), "Test", "10.10.2020", false, 0));
+
         tabArrayList.add("Title");
         tabArrayList.add("IsDone");
+        tabArrayList.add("Tab");
     }
 
     private void loadDB() {
         SqlAdapter sql = SqlAdapter.dbObject(this);
         sql.readTaskFromDB();
+
+//        ArrayList<String> tabNames = sql.getAllTabNames();
+//        for (String tab : tabNames){
+//            if (! tabArrayList.contains(tab))
+//                tabArrayList.add(tab);
+//        }
     }
 
     private void initAdapter() {
@@ -59,6 +65,12 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = (String) parent.getItemAtPosition(position);
                 // Handle the selected item
+                if (selectedItem.equals("Title"))
+                    taskAdapter.sortByTitle();
+                else if (selectedItem.equals("IsDone")) {
+                    taskAdapter.sortByDone();
+                }
+                else taskAdapter.sortByTab();
             }
 
             @Override
