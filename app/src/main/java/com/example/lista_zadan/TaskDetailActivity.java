@@ -12,12 +12,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 
 import java.util.Calendar;
 import java.util.Date;
 
 public class TaskDetailActivity extends AppCompatActivity {
-    private EditText titleEditText, descEditText, tabNameEditText;
+    private EditText titleEditText, tabNameEditText;
+    private NumberPicker priorityEditText;
     private CheckBox isDoneCheckBox;
     private Button datePickerButton;
     private DatePickerDialog datePickerDialog;
@@ -34,11 +36,14 @@ public class TaskDetailActivity extends AppCompatActivity {
 
     private void init() {
         titleEditText = findViewById(R.id.taskTitleEditText);
-//        descEditText = findViewById(R.id.taskDescEditText);
         tabNameEditText = findViewById(R.id.tabNameEditText);
         isDoneCheckBox = findViewById(R.id.isDoneCheck);
         datePickerButton = findViewById(R.id.datePicker);
         deleteButton = findViewById(R.id.deleteButton);
+        priorityEditText = findViewById(R.id.priorityEditText);
+
+        priorityEditText.setMinValue(1);
+        priorityEditText.setMaxValue(3);
     }
 
     public void saveTask(View view) {
@@ -46,12 +51,13 @@ public class TaskDetailActivity extends AppCompatActivity {
         String title = String.valueOf(titleEditText.getText());
         String tabName = String.valueOf(tabNameEditText.getText());
         boolean isDone = isDoneCheckBox.isChecked();
+        int priority = priorityEditText.getValue();
 
         String date = datePickerButton.getText().toString();
 
         if(selectedTask == null) {
             int id = Task.arrayList.size();
-            Task newTask = new Task(id, title, date, isDone, tabName);
+            Task newTask = new Task(id, title, date, isDone, tabName, priority);
             Task.arrayList.add(newTask);
             sql.addTaskToDB(newTask);
         }
@@ -60,6 +66,7 @@ public class TaskDetailActivity extends AppCompatActivity {
             selectedTask.setEndDate(date);
             selectedTask.setTabName(tabName);
             selectedTask.setDone(isDone);
+            selectedTask.setPriority(priority);
 
             sql.updateTaskInDB(selectedTask);
         }
@@ -80,6 +87,7 @@ public class TaskDetailActivity extends AppCompatActivity {
             datePickerButton.setText(selectedTask.getEndDate());
             tabNameEditText.setText(selectedTask.getTabName());
             isDoneCheckBox.setChecked(selectedTask.getDone());
+            priorityEditText.setValue(selectedTask.getPriority());
         }
         else {
             deleteButton.setVisibility(View.INVISIBLE);

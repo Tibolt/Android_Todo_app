@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         tabArrayList.add("Title");
         tabArrayList.add("IsDone");
         tabArrayList.add("Tab");
+        tabArrayList.add("Priority");
     }
 
     private void loadDB() {
@@ -65,12 +66,20 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = (String) parent.getItemAtPosition(position);
                 // Handle the selected item
-                if (selectedItem.equals("Title"))
-                    taskAdapter.sortByTitle();
-                else if (selectedItem.equals("IsDone")) {
-                    taskAdapter.sortByDone();
+                switch (selectedItem) {
+                    case "Title":
+                        taskAdapter.sortByTitle();
+                        break;
+                    case "IsDone":
+                        taskAdapter.sortByDone();
+                        break;
+                    case "Priority":
+                        taskAdapter.sortByPriority();
+                        break;
+                    default:
+                        taskAdapter.sortByTab();
+                        break;
                 }
-                else taskAdapter.sortByTab();
             }
 
             @Override

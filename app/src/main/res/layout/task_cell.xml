@@ -20,7 +20,7 @@
 
         <TextView
             android:id="@+id/taskCellTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="55dp"
@@ -41,6 +41,10 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"/>
     </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
     <TextView
         android:id="@+id/taskCellDate"
         android:layout_width="wrap_content"
@@ -50,6 +54,19 @@
         android:maxLines="1"
         android:textColor="@color/black"
         android:textSize="20sp"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="30dp"
+        android:layout_centerVertical="true"/>
 
+    <TextView
+        android:id="@+id/priorityCell"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:maxLines="1"
+        android:text="1"
+        android:textColor="@color/orange"
+        android:textSize="25sp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"/>
+    </RelativeLayout>
 </LinearLayout>

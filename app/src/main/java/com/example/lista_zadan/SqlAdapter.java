@@ -28,6 +28,7 @@ public class SqlAdapter extends SQLiteOpenHelper {
         public static final String IS_DONE = "isDone";
         public static final String END_DATE = "endDate";
         public static final String TAB_NAME = "tabName";
+        public static final String PRIORITY = "priority";
     }
     private static final String TAB_CREATE_ENTRIES =
             "CREATE TABLE " +
@@ -44,7 +45,8 @@ public class SqlAdapter extends SQLiteOpenHelper {
             TaskDB.COLUMN_NAME_TITLE + " TEXT," +
             TaskDB.END_DATE + " TEXT," +
             TaskDB.IS_DONE + " TEXT," +
-            TaskDB.TAB_NAME + " TEXT)";
+            TaskDB.TAB_NAME + " TEXT," +
+            TaskDB.PRIORITY + " INTEGER)";
 
     private static final String TASK_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TaskDB.TABLE_NAME;
@@ -120,6 +122,7 @@ public class SqlAdapter extends SQLiteOpenHelper {
         contentValues.put(TaskDB.END_DATE, task.getEndDate());
         contentValues.put(TaskDB.IS_DONE, done);
         contentValues.put(TaskDB.TAB_NAME, task.getTabName());
+        contentValues.put(TaskDB.PRIORITY, task.getPriority());
         sql.insert(TaskDB.TABLE_NAME, null, contentValues);
         sql.close();
     }
@@ -151,13 +154,14 @@ public class SqlAdapter extends SQLiteOpenHelper {
                     String endDate = result.getString(2);
                     String isDone = result.getString(3);
                     String tabName = result.getString(4);
+                    int priority = result.getInt(5);
 
                     boolean done;
                     if (isDone.equals("true"))
                         done = true;
                     else done = false;
 
-                    Task task = new Task(id, title, endDate, done, tabName);
+                    Task task = new Task(id, title, endDate, done, tabName, priority);
                     Task.arrayList.add(task);
                 }
             }
@@ -179,6 +183,7 @@ public class SqlAdapter extends SQLiteOpenHelper {
         contentValues.put(TaskDB.END_DATE, task.getEndDate());
         contentValues.put(TaskDB.IS_DONE, done);
         contentValues.put(TaskDB.TAB_NAME, task.getTabName());
+        contentValues.put(TaskDB.PRIORITY, task.getPriority());
 
         sql.update(TaskDB.TABLE_NAME, contentValues, TaskDB._ID + " =? ", new String[]{String.valueOf(task.getId())});
         sql.close();

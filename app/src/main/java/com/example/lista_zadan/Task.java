@@ -9,12 +9,14 @@ public class Task extends Tab {
     private boolean done;
     private String tabName;
     private boolean deleted;
+    private int priority;
 
-    public Task(int id, String title, String endDate, Boolean done, String  tabName) {
+    public Task(int id, String title, String endDate, Boolean done, String  tabName, int priority) {
         super(id, title);
         this.endDate = endDate;
         this.done = done;
         this.tabName = tabName;
+        this.priority = priority;
         deleted = false;
     }
 
@@ -56,7 +58,13 @@ public class Task extends Tab {
     public void setTabName(String tabName) {
         this.tabName = tabName;
     }
+    public int getPriority() {
+        return priority;
+    }
 
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
     public boolean getDeleted() { return deleted; }
     public void setDeleted(Boolean deleted) { this.deleted = deleted; }
     public static Task getSelectedID(int passedID) {

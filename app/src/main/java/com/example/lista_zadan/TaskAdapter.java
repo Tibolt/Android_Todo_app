@@ -43,9 +43,11 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         TextView date = convertView.findViewById(R.id.taskCellDate);
         TextView tabName = convertView.findViewById(R.id.tabName);
         TextView isDone = convertView.findViewById(R.id.taskCellDone);
+        TextView priority = convertView.findViewById(R.id.priorityCell);
         title.setText(task.getTitle());
         date.setText(task.getEndDate());
         tabName.setText(task.getTabName());
+        priority.setText(Integer.toString(task.getPriority()));
         //isDone.setChecked(task.getDone());
 
         if (task.getDone()) {
@@ -56,6 +58,14 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             isDone.setText("o");
             isDone.setTextColor(ContextCompat.getColor(context, R.color.red));
         }
+
+        if (task.getPriority() == 1) {
+            priority.setTextColor(ContextCompat.getColor(context, R.color.blue));
+        } else if (task.getPriority() == 2) {
+            priority.setTextColor(ContextCompat.getColor(context, R.color.yellow));
+        }
+        else
+            priority.setTextColor(ContextCompat.getColor(context, R.color.orange));
 
         return convertView;
     }
@@ -105,6 +115,20 @@ public class TaskAdapter extends ArrayAdapter<Task> {
                     // Sort in ascending order: alphabetically by TAB_NAME
                     return title1.compareToIgnoreCase(title2);
                 }
+            }
+        });
+        notifyDataSetChanged();
+    }
+
+    public void sortByPriority() {
+        // Sort by title
+        tasks.sort(new Comparator<Task>() {
+            @Override
+            public int compare(Task task1, Task task2) {
+                int title1 = task1.getPriority();
+                int title2 = task2.getPriority();
+                // Sort in ascending order: alphabetically by title
+                return Integer.compare(title2,title1);
             }
         });
         notifyDataSetChanged();

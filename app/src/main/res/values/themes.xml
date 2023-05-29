@@ -6,4 +6,9 @@
     </style>
 
     <style name="Theme.Lista_zadan" parent="Base.Theme.Lista_zadan" />
+
+    <style name="MySpinner"
+        parent="@android:style/Widget.TextView.SpinnerItem">
+        <item name="android:textSize">40sp</item>
+    </style>
 </resources>
