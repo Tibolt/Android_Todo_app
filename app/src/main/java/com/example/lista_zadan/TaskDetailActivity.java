@@ -8,6 +8,7 @@ import android.app.DatePickerDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
@@ -19,9 +20,13 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.TimePicker;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class TaskDetailActivity extends AppCompatActivity {
     private EditText titleEditText, tabNameEditText;
@@ -31,8 +36,6 @@ public class TaskDetailActivity extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private Button deleteButton;
     private Task selectedTask;
-    private NotificationReciver notificationReceiver;
-    PendingIntent pendingIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,8 +83,6 @@ public class TaskDetailActivity extends AppCompatActivity {
 
             sql.updateTaskInDB(selectedTask);
         }
-        // Schedule the notification
-        scheduleNotification(title, "Bookmark: " + tabName);
         finish();
     }
 
@@ -113,9 +114,12 @@ public class TaskDetailActivity extends AppCompatActivity {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month = month+1;
+                month = month + 1;
                 String date = toDateString(dayOfMonth, month, year);
                 datePickerButton.setText(date);
+
+                // Show the time picker dialog
+                showTimePickerDialog(year, month, dayOfMonth);
             }
         };
 
@@ -127,20 +131,33 @@ public class TaskDetailActivity extends AppCompatActivity {
         int style = android.R.style.Theme_DeviceDefault_Dialog_Alert;
 
         datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
-        //datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+    }
 
-//        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//        calendar.add(Calendar.MINUTE, 1); // Add one minute to the current time
-//        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-//
-//        showAlert(calendar.getTimeInMillis());
+    private void showTimePickerDialog(int year, int month, int dayOfMonth) {
+        TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(year, month - 1, dayOfMonth, hourOfDay, minute);
+                long notificationTime = calendar.getTimeInMillis();
+
+                scheduleNotification("TASK REMINDER | " + "bookmark: " + tabNameEditText.getText().toString(), titleEditText.getText().toString() ,  notificationTime);
+                showAlert(notificationTime);
+            }
+        };
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, timeSetListener, hour, minute, true);
+        timePickerDialog.show();
     }
 
     private void showAlert(long time) {
         new AlertDialog.Builder(this)
             .setTitle("Notification Date")
             .setMessage(
-                    "Title: Test" +
+                    "Title: " + titleEditText.getText().toString() +
                     "\nTime: " + new Date(time)
             )
             .setPositiveButton("Okay", null)
@@ -199,17 +216,15 @@ public class TaskDetailActivity extends AppCompatActivity {
         sql.deleteTaskFromDB(selectedTask);
         finish();
     }
-    private void scheduleNotification(String title, String text) {
+    private void scheduleNotification(String title, String text, long notificationTime) {
         // Create an intent to launch the notification
         Intent notificationIntent = new Intent(this, NotificationReciver.class);
         notificationIntent.putExtra("title", title);
         notificationIntent.putExtra("text", text);
-        pendingIntent = PendingIntent.getBroadcast(this, NotificationReciver.notificationID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, NotificationReciver.notificationID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        // Get the AlarmManager instance and schedule the notification
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (60 * 1000), pendingIntent);
-
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, notificationTime, pendingIntent);
     }
     private void createNotifiactionChannel() {
         int importance = NotificationManager.IMPORTANCE_DEFAULT;
