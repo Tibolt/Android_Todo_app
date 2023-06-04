@@ -1,8 +1,16 @@
 package com.example.lista_zadan;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,6 +26,10 @@ public class MainActivity extends AppCompatActivity {
     public TaskAdapter taskAdapter;
     private Spinner tabSpinner;
     public ArrayList<String> tabArrayList = new ArrayList<>();
+
+    NotificationManagerCompat notifyManagerCompat;
+    Notification notification;
+    NotificationCompat.Builder notifyBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,4 +127,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    public void showNotification(View view) {
+        // Create an explicit intent to open your app when the notification is clicked
+        Intent intent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        // Build the notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "tasks")
+                .setSmallIcon(android.R.drawable.stat_notify_sync)
+                .setContentTitle("Your Notification Title")
+                .setContentText("Your Notification Text")
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        // Get the NotificationManagerCompat instance and display the notification
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(1, builder.build());
+    }
+
 }

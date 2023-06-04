@@ -2,10 +2,16 @@ package com.example.lista_zadan;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +31,8 @@ public class TaskDetailActivity extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private Button deleteButton;
     private Task selectedTask;
+    private NotificationReciver notificationReceiver;
+    PendingIntent pendingIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +40,8 @@ public class TaskDetailActivity extends AppCompatActivity {
         init();
         checkIfEdit();
         initDateDialog();
+
+        createNotifiactionChannel();
     }
 
     private void init() {
@@ -70,6 +80,8 @@ public class TaskDetailActivity extends AppCompatActivity {
 
             sql.updateTaskInDB(selectedTask);
         }
+        // Schedule the notification
+        scheduleNotification(title, "Bookmark: " + tabName);
         finish();
     }
 
@@ -115,7 +127,24 @@ public class TaskDetailActivity extends AppCompatActivity {
         int style = android.R.style.Theme_DeviceDefault_Dialog_Alert;
 
         datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        //datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+
+//        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//        calendar.add(Calendar.MINUTE, 1); // Add one minute to the current time
+//        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+//
+//        showAlert(calendar.getTimeInMillis());
+    }
+
+    private void showAlert(long time) {
+        new AlertDialog.Builder(this)
+            .setTitle("Notification Date")
+            .setMessage(
+                    "Title: Test" +
+                    "\nTime: " + new Date(time)
+            )
+            .setPositiveButton("Okay", null)
+            .show();
     }
 
     private String toDateString(int day, int month, int year) {
@@ -169,5 +198,25 @@ public class TaskDetailActivity extends AppCompatActivity {
         selectedTask.setDeleted(true);
         sql.deleteTaskFromDB(selectedTask);
         finish();
+    }
+    private void scheduleNotification(String title, String text) {
+        // Create an intent to launch the notification
+        Intent notificationIntent = new Intent(this, NotificationReciver.class);
+        notificationIntent.putExtra("title", title);
+        notificationIntent.putExtra("text", text);
+        pendingIntent = PendingIntent.getBroadcast(this, NotificationReciver.notificationID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        // Get the AlarmManager instance and schedule the notification
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (60 * 1000), pendingIntent);
+
+    }
+    private void createNotifiactionChannel() {
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(NotificationReciver.channelID, "Notification channel", importance);
+            NotificationManager notifyManager = getSystemService(NotificationManager.class);
+            notifyManager.createNotificationChannel(channel);
+        }
     }
 }
